@@ -1,0 +1,48 @@
+name: Run Bot After 31 Minutes
+
+on:
+  schedule:
+    - cron: "*/31 * * * *"  # Chạy mỗi 31 phút
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Bước này đảm bảo rằng mã nguồn của bạn được tải về đúng
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Liệt kê các file trong repo để kiểm tra xem bot.py có đúng vị trí không
+      - name: List files to confirm location of bot.py
+        run: |
+          ls -R  # Liệt kê toàn bộ các file trong repo
+
+      # Cài đặt tất cả các dependencies từ requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      # Kiểm tra phiên bản Python và các package đã cài đặt
+      - name: Check Python version
+        run: |
+          python3 --version
+
+      - name: Check installed packages
+        run: |
+          pip list
+
+      # Kiểm tra quyền của file bot.py
+      - name: Check file permissions
+        run: |
+          ls -l bot.py  # Kiểm tra quyền truy cập của bot.py
+
+      # Nếu cần, bạn có thể sửa quyền của bot.py
+      - name: Fix file permissions
+        run: |
+          chmod +x bot.py
+
+      # Chạy bot.py
+      - name: Run the bot
+        run: |
+          python3 bot.py  # Giả sử bot.py nằm ở thư mục gốc của repo
